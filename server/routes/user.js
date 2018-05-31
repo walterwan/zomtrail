@@ -7,10 +7,12 @@ const ObjectID = require('mongodb').ObjectID;
  * get all users
  */
 router.route('/users')
+  .get(userController.apiGetAll)
   .post(userController.apiPost);
 
 router.route('/users/:userId')
   .get(userController.apiGet)
+  .delete(userController.apiDelete)
   .patch(userController.apiUpdate);
 
 router.route('/usersByEmail/:email')

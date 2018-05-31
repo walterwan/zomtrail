@@ -23,6 +23,24 @@ exports.apiUpdate = (req, res) => {
       }
     });
 };
+exports.apiDelete = (req, res) => {
+  User.findByIdAndRemove(req.params.userId, function(err, user) {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send(user);
+      }
+    });
+};
+exports.apiGetAll = (req, res) => {
+  User.find({}, function(err, users) {
+    if (err) {
+      res.send(err);
+    } else {
+      res.send(users);
+    }
+  });
+};
 exports.apiGet = (req, res) => {
   User.findById(req.params.userId, function(err, user) {
     if (err) {

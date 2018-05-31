@@ -166,7 +166,7 @@ class Game extends Component {
           <TakePhotoModal pathId={this.state.pathId} userId={this.state.userId}/>
           <Gmap />
           <div className='gameplay-screen'>
-            <TutorialModal name='gameplay' text={gameplayTutorialText}/>/>
+            <TutorialModal name='gameplay' text={gameplayTutorialText}/>
             <div className='gameplay-top'>
               <DropdownMenu />
               <h1 className='gameplay-score'>Score: {this.state.user.score}</h1>
