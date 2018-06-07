@@ -7,8 +7,8 @@ const ObjectID = require('mongodb').ObjectID;
  * get all users
  */
 router.route('/users')
-  .get(userController.apiGetAll)
-  .post(userController.apiPost);
+  .post(userController.apiPost)
+  .get(userController.apiGetHighScorers);
 
 router.route('/users/:userId')
   .get(userController.apiGet)

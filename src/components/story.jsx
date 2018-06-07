@@ -14,6 +14,7 @@ class Story extends Component {
       user: null
     };
   }
+
   handleNewGame() {
     axios({
       method: "POST",
@@ -30,9 +31,9 @@ class Story extends Component {
       let editUser = this.state.user;
       editUser.currentPathId = result.data.pathId;
       this.setState({ path: result.data, pathId: result.data.pathId, user: editUser });
-    }).then(() => this.handleContinue());
+    }).then(() => this.handleContinue("waypoints"));
   }
-  handleContinue() {
+  handleContinue(type) {
     if (this.state.pathId) {
       axios({
         method: "PATCH",
@@ -41,7 +42,7 @@ class Story extends Component {
       }).then((res) => {
         console.log(res.data);
         this.props.history
-          .push(`/${this.userId}/${this.state.pathId}/waypoints`);
+          .push(`/${this.userId}/${this.state.pathId}/${type}`);
       });
     }
   }
@@ -95,11 +96,12 @@ class Story extends Component {
 
   render() {
     let continueButton;
+    let gameWonMessage = (<p>Congratulations! You've finished a max length journey and can now start a new game! Enjoy!</p>); 
     if (this.state.user && this.state.path) {
       if ((this.state.user.currentPathId > -1) && (this.state.path.steps.length < 9)) {
         continueButton = (
                   <button
-                    onClick={this.handleContinue}
+                    onClick={() => { this.handleContinue('game'); }}
                     className="continue mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
                     Continue Previous Journey
                   </button>

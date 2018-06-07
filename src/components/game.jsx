@@ -26,7 +26,7 @@ class Game extends Component {
       userId: this.props.match.params.userId,
       user: null,
     };
-
+    this.handleTakePhoto = this.handleTakePhoto.bind(this);
   }
 
   loadMaterialDesignLite() {
@@ -118,15 +118,16 @@ class Game extends Component {
   }
 
   renderSpeechToTextButton() {
-    if (window.hasOwnProperty('webkitSpeechRecognition')) {
-      return (
-        <div></div>
-      );
+
+    if (this.state.path.end_point && window.hasOwnProperty('webkitSpeechRecognition')) {
       // return (
-      //   <div>
-      //     <img onClick={this.startDictation} src="//i.imgur.com/cHidSVu.gif" />
-      //   </div>
+      //   <div></div>
       // );
+      return (
+        <div>
+          <img onClick={this.startDictation} src="//i.imgur.com/cHidSVu.gif" />
+        </div>
+      );
     } else {
       return ( <div></div> );
     }
@@ -147,28 +148,58 @@ class Game extends Component {
   }
 
   handleTakePhoto() {
-    document.getElementById('photo-modal')
+    if ((this.state.path.steps[this.state.path.steps.length - 1].direction.length > 10) || (!this.state.path.end_point)) {
+      document.getElementById('photo-modal')
       .style.display = 'block';
+    } else {
+      document.getElementById('error-tutorial-modal')
+      .style.display = 'block';
+    }
   }
 
   render() {
     let gameplayTutorialText = "This is the gameplay screen.  All resources except Days increase your score-- and its game over if they hit 0! Actions recover them, but have cooldowns. Lastly, remember to click the event button when it shows up to progress in the game!";
 
     let directionTutorialText = "Enter the directions to the next waypoint here. Remember that it is the apocalypse and so there are no street signs! Using street names will invalidate your entry!";
-
-
+    let errorTutorialText = "Please make sure to describe your path as you approach the landmark. Your comrades depend on it!";
+    let textArea;
     if (!this.state.path || !this.state.user) {
       return (<div>loading</div>);
     } else {
+      if (this.state.path.end_point) {
+        textArea = (
+          <form
+            className='directions'
+            id='directions-1'
+            onSubmit={this.handleCheckIn}>
+            <TutorialModal name='direction' text={directionTutorialText}/>
+            <div className="dir-textfield mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+              id="dir-textfield">
+              <textarea
+                onChange={this.update()}
+                className="dir-textarea mdl-textfield__input"
+                type="text" rows= "6" id="direction" />
+              <label
+                className="dir-label mdl-textfield__label"
+                htmlFor="direction">Directions
+              </label>
+            </div>
+          </form>);
+      } else {
+        textArea = (
+          <h2 className="no-text-field">Please make your way to the starting waypoint you've chosen and record an image to begin your journey!</h2>
+        );
+      }
       return (
         <div className='game-div'>
           <EventModal />
-          <TakePhotoModal pathId={this.state.pathId} userId={this.state.userId}/>
-          <Gmap />
+          <TakePhotoModal pathId={this.state.pathId} path={this.state.path} userId={this.state.userId} user={this.state.user}/>
+          <TutorialModal name="error" text={errorTutorialText} display="none" />
+          <Gmap path={this.state.path}/>
           <div className='gameplay-screen'>
             <TutorialModal name='gameplay' text={gameplayTutorialText}/>
             <div className='gameplay-top'>
-              <DropdownMenu />
+              <DropdownMenu userId={this.state.userId} pathId={this.state.pathId}/>
               <h1 className='gameplay-score'>Score: {this.state.user.score}</h1>
             </div>
             <div className='gameplay-mid'>
@@ -213,30 +244,7 @@ class Game extends Component {
               </div>
             </div>
           </div>
-          <form
-            className='directions'
-            id='directions-1'
-            onSubmit={this.handleCheckIn}>
-            <TutorialModal name='direction' text={directionTutorialText}/>
-            <div className="dir-textfield mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
-              id="dir-textfield">
-              <textarea
-                onChange={this.update()}
-                className="dir-textarea mdl-textfield__input"
-                type="text" rows= "6" id="direction" />
-              <label
-                className="dir-label mdl-textfield__label"
-                htmlFor="direction">Directions
-              </label>
-            </div>
-            <div className='summit-action-buttons'>
-              <input
-                type='submit'
-                value='Submit'
-                className="summit-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
-              </input>
-            </div>
-          </form>
+          {textArea}
           {this.renderSpeechToTextButton()}
         </div>
       );
