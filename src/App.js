@@ -4,6 +4,7 @@ import { Switch, Route } from 'react-router-dom';
 // components
 import Story from './components/story';
 import Game from './components/game';
+import Data from './components/data';
 import Login from './components/login';
 import Locations from './components/locations';
 import ChooseWaypoint from './components/choose-waypoint';
@@ -33,6 +34,7 @@ class App extends Component {
           <Route exact path="/:userId/story" component={Story} />
           <Route exact path="/:userId/:pathId/game" component={Game} />
           <Route exact path="/location" component={Locations} />
+          <Route exact path="/eHMLgUEVXV" component={Data} />
           <Route exact path="/:userId/:pathId/waypoints" component={ChooseWaypoint} />
           <Route exact path="/:userId/:pathId/scoreboard" component={Scoreboard} />
           <Route path="**" component={notValidPath} />

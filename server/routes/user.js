@@ -12,7 +12,7 @@ router.route('/users')
 
 router.route('/users/:userId')
   .get(userController.apiGet)
-  .delete(userController.apiDelete)
+  // .delete(userController.apiDelete)
   .patch(userController.apiUpdate);
 
 router.route('/usersByEmail/:email')

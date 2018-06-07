@@ -38,7 +38,7 @@ exports.apiUpdate = (req, res) => {
 };
 exports.apiGetAll = function(req, res) {
   Path.find().sort('updatedAt')
-      .limit(20)
+      // .limit(20)
       .exec(function(err, paths) {
     if (err) {
       res.send(err);
@@ -49,7 +49,7 @@ exports.apiGetAll = function(req, res) {
   });
 };
 exports.apiDelete = function(req, res) {
-  Path.findByIdAndRemove(req.params.path_id, function(err, path) {
+  Path.findByIdAndRemove(req.params.pathId, function(err, path) {
     if (err) {
       console.log(err);
       res.send(err);
@@ -59,16 +59,16 @@ exports.apiDelete = function(req, res) {
   });
 };
 
-exports.apiDeleteAll = function(req, res) {
-  Path.find({}, function(err, paths) {
-    if (err) {
-      console.log(err);
-      res.send(err);
-    } else {
-      paths.forEach((path) => {
-        Path.findByIdAndRemove(path._id, function() {});
-      });
-      res.json({ message: 'All paths has been deleted' });
-    }
-  });
-};
+// exports.apiDeleteAll = function(req, res) {
+//   Path.find({}, function(err, paths) {
+//     if (err) {
+//       console.log(err);
+//       res.send(err);
+//     } else {
+//       paths.forEach((path) => {
+//         Path.findByIdAndRemove(path._id, function() {});
+//       });
+//       res.json({ message: 'All paths has been deleted' });
+//     }
+//   });
+// };
